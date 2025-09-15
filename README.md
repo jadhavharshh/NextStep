@@ -1,135 +1,242 @@
-# Turborepo starter
+# NextStep
 
-This Turborepo starter is maintained by the Turborepo core team.
+A modern full-stack application built with Turborepo, featuring a Next.js frontend and Express.js backend with TypeScript support.
 
-## Using this example
+## 🚀 Tech Stack
 
-Run the following command:
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Backend**: Express.js, TypeScript
+- **Styling**: CSS Modules, Tailwind CSS (optional)
+- **Build Tool**: Turborepo
+- **Package Manager**: pnpm
+- **Code Quality**: ESLint, Prettier
+- **HTTP Client**: Axios
 
-```sh
-npx create-turbo@latest
-```
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
+## 📁 Project Structure
 
 ```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+├── apps/
+│   ├── api/                 # Express.js backend
+│   │   ├── src/
+│   │   │   └── server.ts    # Main server file
+│   │   ├── package.json
+│   │   ├── tsconfig.json
+│   │   └── eslint.config.js
+│   └── web/                 # Next.js frontend
+│       ├── app/             # App router pages
+│       ├── lib/
+│       │   └── api.ts       # API client utilities
+│       ├── public/          # Static assets
+│       ├── package.json
+│       ├── next.config.js
+│       └── tsconfig.json
+├── packages/
+│   ├── eslint-config/       # Shared ESLint configurations
+│   ├── typescript-config/   # Shared TypeScript configurations
+│   └── ui/                  # Shared UI components
+├── .prettierrc             # Prettier configuration
+├── .prettierignore         # Prettier ignore patterns
+├── turbo.json              # Turborepo configuration
+└── pnpm-workspace.yaml     # pnpm workspace configuration
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## 🛠️ Installation
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+### Prerequisites
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+- Node.js 18+
+- pnpm (recommended) or npm/yarn
 
-### Develop
+### Setup
 
-To develop all apps and packages, run the following command:
+1. **Clone the repository**
 
-```
-cd my-turborepo
+   ```bash
+   git clone <repository-url>
+   cd NextStep
+   ```
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
+2. **Install dependencies**
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
+   ```bash
+   pnpm install
+   ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+3. **Install dependencies for all workspaces**
+   ```bash
+   pnpm install
+   ```
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+## 🚀 Development
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
+### Start Development Servers
+
+**Option 1: Start all services**
+
+```bash
+pnpm run dev
 ```
 
-### Remote Caching
+**Option 2: Start services individually**
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+**Frontend (Next.js)**
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+```bash
+cd apps/web
+pnpm run dev
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+- Access at: http://localhost:3000
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+**Backend (Express.js)**
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+```bash
+cd apps/api
+pnpm run dev
 ```
 
-## Useful Links
+- Access at: http://localhost:3001
 
-Learn more about the power of Turborepo:
+### Available Scripts
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+**Root level scripts:**
+
+- `pnpm run dev` - Start all development servers
+- `pnpm run build` - Build all apps and packages
+- `pnpm run lint` - Lint all code
+- `pnpm run format` - Format code with Prettier
+
+**Web app scripts:**
+
+- `pnpm run dev` - Start Next.js development server
+- `pnpm run build` - Build for production
+- `pnpm run start` - Start production server
+- `pnpm run lint` - Lint code
+- `pnpm run check-types` - Type check
+
+**API scripts:**
+
+- `pnpm run dev` - Start Express development server with hot reload
+- `pnpm run build` - Build TypeScript to JavaScript
+- `pnpm run start` - Start production server
+- `pnpm run lint` - Lint code
+- `pnpm run check-types` - Type check
+
+## 🔧 Configuration
+
+### Environment Variables
+
+**Frontend (.env.local in apps/web)**
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3001/api
+```
+
+**Backend (.env in apps/api)**
+
+```env
+PORT=3001
+NODE_ENV=development
+```
+
+## 📡 API Endpoints
+
+### Health Check
+
+- **GET** `/api/health`
+- Returns server status and health information
+
+### Example Response
+
+```json
+{
+  "status": "ok",
+  "message": "Backend is running"
+}
+```
+
+## 🧪 Testing
+
+### Code Quality
+
+```bash
+# Lint all code
+pnpm run lint
+
+# Format code
+pnpm run format
+
+# Type checking
+pnpm run check-types
+```
+
+### Build Verification
+
+```bash
+# Build all apps
+pnpm run build
+
+# Build specific app
+pnpm run build --filter=web
+pnpm run build --filter=api
+```
+
+## 🚀 Deployment
+
+### Frontend (Next.js)
+
+```bash
+cd apps/web
+pnpm run build
+pnpm run start
+```
+
+### Backend (Express.js)
+
+```bash
+cd apps/api
+pnpm run build
+pnpm run start
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Make your changes
+4. Run tests and linting: `pnpm run lint && pnpm run check-types`
+5. Format code: `pnpm run format`
+6. Commit your changes: `git commit -am 'Add some feature'`
+7. Push to the branch: `git push origin feature/your-feature`
+8. Submit a pull request
+
+## 📝 Code Style
+
+This project uses:
+
+- **ESLint** for code linting
+- **Prettier** for code formatting
+- **TypeScript** for type safety
+
+### Pre-commit Hooks
+
+The project includes pre-commit hooks to ensure code quality. Make sure to run:
+
+```bash
+pnpm run lint
+pnpm run format
+```
+
+before committing.
+
+## 🔗 Useful Links
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Express.js Documentation](https://expressjs.com/)
+- [Turborepo Documentation](https://turborepo.com/docs)
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
+- [pnpm Documentation](https://pnpm.io/)
+
+## 📄 License
+
+This project is licensed under the MIT License.
