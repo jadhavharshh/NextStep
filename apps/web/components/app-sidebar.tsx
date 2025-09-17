@@ -48,37 +48,37 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard",
       icon: IconDashboard,
     },
     {
       title: "Assessment",
-      url: "#",
+      url: "/assessment",
       icon: IconClipboardCheck,
     },
     {
       title: "Path Mapping",
-      url: "#",
+      url: "/path-mapping",
       icon: IconMap,
     },
     {
       title: "College Directory",
-      url: "#",
+      url: "/college-directory",
       icon: IconSchool,
     },
     {
       title: "Career Guidance",
-      url: "#",
+      url: "/career-guidance",
       icon: IconBookmark,
     },
     {
       title: "Schedule",
-      url: "#",
+      url: "/schedule",
       icon: IconCalendar,
     },
     {
       title: "Certifications",
-      url: "#",
+      url: "/certifications",
       icon: IconCertificate,
     },
   ],
