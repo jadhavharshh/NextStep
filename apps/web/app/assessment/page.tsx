@@ -1,9 +1,12 @@
+"use client"
+
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
+import { AptitudeQuiz } from "@/components/aptitude-quiz"
 
 export default function AssessmentPage() {
   return (
@@ -24,6 +27,9 @@ export default function AssessmentPage() {
               <div className="px-4 lg:px-6">
                 <h1 className="text-2xl font-bold">Assessment</h1>
                 <p className="text-muted-foreground">Student assessments and evaluations</p>
+              </div>
+              <div className="px-4 lg:px-6">
+                <AptitudeQuiz />
               </div>
             </div>
           </div>
