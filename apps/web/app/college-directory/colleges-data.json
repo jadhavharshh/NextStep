@@ -1,0 +1,365 @@
+[
+  {
+    "id": 1,
+    "name": "Indian Institute of Technology Bombay",
+    "shortName": "IIT Bombay",
+    "location": "Mumbai",
+    "state": "Maharashtra",
+    "type": "Government",
+    "establishedYear": 1958,
+    "ranking": 1,
+    "branches": [
+      {
+        "name": "Computer Science and Engineering",
+        "degreeTypes": ["B.Tech", "M.Tech", "PhD"],
+        "seats": {"B.Tech": 120, "M.Tech": 60, "PhD": 40}
+      },
+      {
+        "name": "Electrical Engineering",
+        "degreeTypes": ["B.Tech", "M.Tech", "PhD"],
+        "seats": {"B.Tech": 90, "M.Tech": 45, "PhD": 30}
+      },
+      {
+        "name": "Mechanical Engineering",
+        "degreeTypes": ["B.Tech", "M.Tech", "PhD"],
+        "seats": {"B.Tech": 85, "M.Tech": 40, "PhD": 25}
+      }
+    ],
+    "fees": {
+      "B.Tech": 250000,
+      "M.Tech": 180000,
+      "PhD": 50000
+    },
+    "website": "https://www.iitb.ac.in",
+    "nirf_ranking": 1
+  },
+  {
+    "id": 2,
+    "name": "Indian Institute of Technology Delhi",
+    "shortName": "IIT Delhi",
+    "location": "Delhi",
+    "state": "Delhi",
+    "type": "Government",
+    "establishedYear": 1961,
+    "ranking": 2,
+    "branches": [
+      {
+        "name": "Computer Science and Engineering",
+        "degreeTypes": ["B.Tech", "M.Tech", "PhD"],
+        "seats": {"B.Tech": 110, "M.Tech": 55, "PhD": 35}
+      },
+      {
+        "name": "Electronics and Communication",
+        "degreeTypes": ["B.Tech", "M.Tech", "PhD"],
+        "seats": {"B.Tech": 80, "M.Tech": 40, "PhD": 25}
+      }
+    ],
+    "fees": {
+      "B.Tech": 250000,
+      "M.Tech": 180000,
+      "PhD": 50000
+    },
+    "website": "https://www.iitd.ac.in",
+    "nirf_ranking": 2
+  },
+  {
+    "id": 3,
+    "name": "Indian Institute of Science Bangalore",
+    "shortName": "IISc Bangalore",
+    "location": "Bangalore",
+    "state": "Karnataka",
+    "type": "Government",
+    "establishedYear": 1909,
+    "ranking": 3,
+    "branches": [
+      {
+        "name": "Computer Science and Automation",
+        "degreeTypes": ["M.Tech", "PhD"],
+        "seats": {"M.Tech": 70, "PhD": 50}
+      },
+      {
+        "name": "Electrical Communication Engineering",
+        "degreeTypes": ["M.Tech", "PhD"],
+        "seats": {"M.Tech": 45, "PhD": 35}
+      }
+    ],
+    "fees": {
+      "M.Tech": 160000,
+      "PhD": 40000
+    },
+    "website": "https://www.iisc.ac.in",
+    "nirf_ranking": 1
+  },
+  {
+    "id": 4,
+    "name": "Birla Institute of Technology and Science",
+    "shortName": "BITS Pilani",
+    "location": "Pilani",
+    "state": "Rajasthan",
+    "type": "Private",
+    "establishedYear": 1964,
+    "ranking": 4,
+    "branches": [
+      {
+        "name": "Computer Science and Engineering",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 150, "M.Tech": 80}
+      },
+      {
+        "name": "Electronics and Instrumentation",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 120, "M.Tech": 60}
+      },
+      {
+        "name": "Chemical Engineering",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 90, "M.Tech": 45}
+      }
+    ],
+    "fees": {
+      "B.Tech": 450000,
+      "M.Tech": 320000
+    },
+    "website": "https://www.bits-pilani.ac.in",
+    "nirf_ranking": 25
+  },
+  {
+    "id": 5,
+    "name": "Vellore Institute of Technology",
+    "shortName": "VIT Vellore",
+    "location": "Vellore",
+    "state": "Tamil Nadu",
+    "type": "Private",
+    "establishedYear": 1984,
+    "ranking": 5,
+    "branches": [
+      {
+        "name": "Computer Science and Engineering",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 300, "M.Tech": 150}
+      },
+      {
+        "name": "Information Technology",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 250, "M.Tech": 120}
+      },
+      {
+        "name": "Electronics and Communication",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 200, "M.Tech": 100}
+      }
+    ],
+    "fees": {
+      "B.Tech": 380000,
+      "M.Tech": 280000
+    },
+    "website": "https://vit.ac.in",
+    "nirf_ranking": 11
+  },
+  {
+    "id": 6,
+    "name": "Manipal Institute of Technology",
+    "shortName": "MIT Manipal",
+    "location": "Manipal",
+    "state": "Karnataka",
+    "type": "Private",
+    "establishedYear": 1957,
+    "ranking": 6,
+    "branches": [
+      {
+        "name": "Computer Science and Engineering",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 180, "M.Tech": 90}
+      },
+      {
+        "name": "Information and Communication Technology",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 120, "M.Tech": 60}
+      }
+    ],
+    "fees": {
+      "B.Tech": 350000,
+      "M.Tech": 250000
+    },
+    "website": "https://manipal.edu",
+    "nirf_ranking": 47
+  },
+  {
+    "id": 7,
+    "name": "Delhi Technological University",
+    "shortName": "DTU Delhi",
+    "location": "Delhi",
+    "state": "Delhi",
+    "type": "Government",
+    "establishedYear": 1941,
+    "ranking": 7,
+    "branches": [
+      {
+        "name": "Computer Engineering",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 120, "M.Tech": 60}
+      },
+      {
+        "name": "Electronics and Communication",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 90, "M.Tech": 45}
+      },
+      {
+        "name": "Information Technology",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 85, "M.Tech": 40}
+      }
+    ],
+    "fees": {
+      "B.Tech": 150000,
+      "M.Tech": 120000
+    },
+    "website": "https://www.dtu.ac.in",
+    "nirf_ranking": 36
+  },
+  {
+    "id": 8,
+    "name": "PSG College of Technology",
+    "shortName": "PSG Tech",
+    "location": "Coimbatore",
+    "state": "Tamil Nadu",
+    "type": "Private",
+    "establishedYear": 1951,
+    "ranking": 8,
+    "branches": [
+      {
+        "name": "Computer Science and Engineering",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 120, "M.Tech": 60}
+      },
+      {
+        "name": "Electronics and Communication",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 90, "M.Tech": 45}
+      }
+    ],
+    "fees": {
+      "B.Tech": 280000,
+      "M.Tech": 200000
+    },
+    "website": "https://www.psgtech.edu",
+    "nirf_ranking": 52
+  },
+  {
+    "id": 9,
+    "name": "Netaji Subhas University of Technology",
+    "shortName": "NSUT Delhi",
+    "location": "Delhi",
+    "state": "Delhi",
+    "type": "Government",
+    "establishedYear": 1983,
+    "ranking": 9,
+    "branches": [
+      {
+        "name": "Computer Science and Engineering",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 100, "M.Tech": 50}
+      },
+      {
+        "name": "Information Technology",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 80, "M.Tech": 40}
+      }
+    ],
+    "fees": {
+      "B.Tech": 140000,
+      "M.Tech": 110000
+    },
+    "website": "https://www.nsut.ac.in",
+    "nirf_ranking": 88
+  },
+  {
+    "id": 10,
+    "name": "SRM Institute of Science and Technology",
+    "shortName": "SRM Chennai",
+    "location": "Chennai",
+    "state": "Tamil Nadu",
+    "type": "Private",
+    "establishedYear": 1985,
+    "ranking": 10,
+    "branches": [
+      {
+        "name": "Computer Science and Engineering",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 400, "M.Tech": 200}
+      },
+      {
+        "name": "Information Technology",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 300, "M.Tech": 150}
+      },
+      {
+        "name": "Electronics and Communication",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 250, "M.Tech": 125}
+      }
+    ],
+    "fees": {
+      "B.Tech": 320000,
+      "M.Tech": 240000
+    },
+    "website": "https://www.srmist.edu.in",
+    "nirf_ranking": 41
+  },
+  {
+    "id": 11,
+    "name": "Mumbai University Institute of Technology",
+    "shortName": "MUIT Mumbai",
+    "location": "Mumbai",
+    "state": "Maharashtra",
+    "type": "Government",
+    "establishedYear": 1962,
+    "ranking": 11,
+    "branches": [
+      {
+        "name": "Computer Engineering",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 120, "M.Tech": 60}
+      },
+      {
+        "name": "Electronics Engineering",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 90, "M.Tech": 45}
+      }
+    ],
+    "fees": {
+      "B.Tech": 120000,
+      "M.Tech": 90000
+    },
+    "website": "https://mu.ac.in",
+    "nirf_ranking": 95
+  },
+  {
+    "id": 12,
+    "name": "Bangalore Institute of Technology",
+    "shortName": "BIT Bangalore",
+    "location": "Bangalore",
+    "state": "Karnataka",
+    "type": "Private",
+    "establishedYear": 1979,
+    "ranking": 12,
+    "branches": [
+      {
+        "name": "Computer Science and Engineering",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 180, "M.Tech": 90}
+      },
+      {
+        "name": "Information Science and Engineering",
+        "degreeTypes": ["B.Tech", "M.Tech"],
+        "seats": {"B.Tech": 120, "M.Tech": 60}
+      }
+    ],
+    "fees": {
+      "B.Tech": 250000,
+      "M.Tech": 180000
+    },
+    "website": "https://www.bit-bangalore.edu.in",
+    "nirf_ranking": 78
+  }
+]
