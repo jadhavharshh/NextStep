@@ -466,3 +466,4 @@ enum RecommendationType {
   SCHOLARSHIP
   TIMELINE_EVENT
 }
+
