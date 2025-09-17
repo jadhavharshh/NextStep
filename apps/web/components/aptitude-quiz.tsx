@@ -99,19 +99,40 @@ export function AptitudeQuiz() {
     }
   }
 
-  const finishQuiz = (finalAnswers: string[]) => {
+  const finishQuiz = async (finalAnswers: string[]) => {
     const correctAnswers = questions.map(q => q.answer)
     const score = finalAnswers.reduce((acc, answer, index) => {
       return acc + (answer === correctAnswers[index] ? 1 : 0)
     }, 0)
 
-    setQuizResult({
+    const quizResult = {
       score,
       totalQuestions: questions.length,
       userAnswers: finalAnswers,
       correctAnswers,
       questions
-    })
+    }
+
+    setQuizResult(quizResult)
+
+    // Save quiz data to API
+    try {
+      const response = await axios.post('/api/assessment', {
+        topic: selectedTopic,
+        questions: questions,
+        userAnswers: finalAnswers,
+        score: score,
+        totalQuestions: questions.length,
+        completedAt: new Date().toISOString()
+      })
+
+      if (response.data.success) {
+        console.log('Quiz data saved successfully:', response.data.data)
+      }
+    } catch (error) {
+      console.error('Failed to save quiz data:', error)
+      // Don't block the user experience if saving fails
+    }
   }
 
   const resetQuiz = () => {
