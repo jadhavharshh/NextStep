@@ -81,9 +81,24 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Save the quiz response
-    const savedQuizResponse = await prisma.quizResponse.create({
-      data: {
+    // Save the quiz response (upsert to allow retakes)
+    const savedQuizResponse = await prisma.quizResponse.upsert({
+      where: {
+        userId_quizId: {
+          userId: user.id,
+          quizId: quiz.id
+        }
+      },
+      update: {
+        answers: {
+          userAnswers: data.userAnswers,
+          correctAnswers: data.questions.map(q => q.answer),
+          questions: data.questions
+        },
+        score: data.score,
+        completedAt: new Date()
+      },
+      create: {
         userId: user.id,
         quizId: quiz.id,
         answers: {

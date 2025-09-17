@@ -9,7 +9,7 @@ import { Progress } from "@/components/ui/progress"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
-import { AlertCircle, CheckCircle, Trophy, RotateCcw } from "lucide-react"
+import { AlertCircle, CheckCircle, Trophy, RotateCcw, History, ArrowLeft, Calendar, Clock } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
 interface Question {
@@ -25,6 +25,22 @@ interface QuizResult {
   userAnswers: string[]
   correctAnswers: string[]
   questions: Question[]
+}
+
+interface HistoricalQuizResult {
+  id: string
+  userId: string
+  score: number
+  completedAt: string
+  quiz: {
+    title: string
+    totalQuestions: number
+  }
+  answers: {
+    userAnswers: string[]
+    correctAnswers: string[]
+    questions: Question[]
+  }
 }
 
 const QUIZ_TOPICS = [
@@ -51,6 +67,26 @@ export function AptitudeQuiz() {
   const [error, setError] = useState<string | null>(null)
   const [quizResult, setQuizResult] = useState<QuizResult | null>(null)
   const [quizStarted, setQuizStarted] = useState(false)
+  const [showHistory, setShowHistory] = useState(false)
+  const [quizHistory, setQuizHistory] = useState<HistoricalQuizResult[]>([])
+  const [selectedHistoricalQuiz, setSelectedHistoricalQuiz] = useState<HistoricalQuizResult | null>(null)
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false)
+
+  const fetchQuizHistory = async () => {
+    setIsLoadingHistory(true)
+    setError(null)
+    try {
+      const response = await axios.get('/api/assessment?userId=demo-user')
+      if (response.data.success) {
+        setQuizHistory(response.data.data)
+      }
+    } catch (err) {
+      setError("Failed to fetch quiz history. Please try again.")
+      console.error("Error fetching quiz history:", err)
+    } finally {
+      setIsLoadingHistory(false)
+    }
+  }
 
   const fetchQuestions = async (topic: string) => {
     setIsLoading(true)
@@ -128,6 +164,10 @@ export function AptitudeQuiz() {
 
       if (response.data.success) {
         console.log('Quiz data saved successfully:', response.data.data)
+        // Refresh history if it's being shown
+        if (showHistory && quizHistory.length > 0) {
+          fetchQuizHistory()
+        }
       }
     } catch (error) {
       console.error('Failed to save quiz data:', error)
@@ -144,6 +184,8 @@ export function AptitudeQuiz() {
     setQuizResult(null)
     setQuizStarted(false)
     setError(null)
+    setShowHistory(false)
+    setSelectedHistoricalQuiz(null)
   }
 
   const startNewQuiz = () => {
@@ -153,6 +195,213 @@ export function AptitudeQuiz() {
     setSelectedAnswer("")
     setQuizResult(null)
     setQuizStarted(false)
+    setSelectedHistoricalQuiz(null)
+  }
+
+  const toggleHistory = () => {
+    if (!showHistory) {
+      fetchQuizHistory()
+    }
+    setShowHistory(!showHistory)
+    setSelectedHistoricalQuiz(null)
+  }
+
+  const viewHistoricalQuiz = (historicalQuiz: HistoricalQuizResult) => {
+    setSelectedHistoricalQuiz(historicalQuiz)
+  }
+
+  const backToHistory = () => {
+    setSelectedHistoricalQuiz(null)
+  }
+
+  // Historical Quiz Result Detail View
+  if (selectedHistoricalQuiz) {
+    const percentage = Math.round((selectedHistoricalQuiz.score / selectedHistoricalQuiz.quiz.totalQuestions) * 100)
+    const getScoreColor = () => {
+      if (percentage >= 80) return "text-green-600"
+      if (percentage >= 60) return "text-yellow-600"
+      return "text-red-600"
+    }
+
+    return (
+      <div className="space-y-6">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Button onClick={backToHistory} variant="outline" size="sm">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to History
+              </Button>
+            </div>
+            <CardTitle className="flex items-center justify-center gap-2">
+              <Trophy className="h-6 w-6" />
+              Quiz Result - {selectedHistoricalQuiz.quiz.title}
+            </CardTitle>
+            <CardDescription className="text-center">
+              Completed on {new Date(selectedHistoricalQuiz.completedAt).toLocaleDateString()} at {new Date(selectedHistoricalQuiz.completedAt).toLocaleTimeString()}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="text-center space-y-2">
+              <div className={`text-4xl font-bold ${getScoreColor()}`}>
+                {selectedHistoricalQuiz.score}/{selectedHistoricalQuiz.quiz.totalQuestions}
+              </div>
+              <div className={`text-2xl font-semibold ${getScoreColor()}`}>
+                {percentage}%
+              </div>
+              <Badge variant={percentage >= 80 ? "default" : percentage >= 60 ? "secondary" : "destructive"}>
+                {percentage >= 80 ? "Excellent!" : percentage >= 60 ? "Good Job!" : "Keep Practicing!"}
+              </Badge>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-4">
+              <h3 className="font-semibold">Question Review:</h3>
+              {selectedHistoricalQuiz.answers.questions.map((question, index) => {
+                const userAnswer = selectedHistoricalQuiz.answers.userAnswers[index]
+                const correctAnswer = selectedHistoricalQuiz.answers.correctAnswers[index]
+                const isCorrect = userAnswer === correctAnswer
+
+                return (
+                  <Card key={index} className={`border-l-4 ${isCorrect ? "border-l-green-500" : "border-l-red-500"}`}>
+                    <CardContent className="pt-4">
+                      <div className="space-y-3">
+                        <div className="flex items-start gap-2">
+                          {isCorrect ? (
+                            <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                          ) : (
+                            <AlertCircle className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
+                          )}
+                          <div className="space-y-2 flex-1">
+                            <p className="font-medium">Q{index + 1}: {question.question}</p>
+                            <div className="space-y-1 text-sm">
+                              <p>
+                                <span className="font-medium">Your answer:</span>{" "}
+                                <span className={isCorrect ? "text-green-600" : "text-red-600"}>
+                                  {userAnswer || "No answer selected"}
+                                </span>
+                              </p>
+                              {!isCorrect && (
+                                <p>
+                                  <span className="font-medium">Correct answer:</span>{" "}
+                                  <span className="text-green-600">{correctAnswer}</span>
+                                </p>
+                              )}
+                              <p className="text-muted-foreground">
+                                <span className="font-medium">Explanation:</span> {question.explanation}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  // Quiz History List View
+  if (showHistory) {
+    return (
+      <div className="space-y-6">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <History className="h-5 w-5" />
+                  Quiz History
+                </CardTitle>
+                <CardDescription>
+                  View your past quiz attempts and results
+                </CardDescription>
+              </div>
+              <Button onClick={toggleHistory} variant="outline">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Quiz
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoadingHistory ? (
+              <div className="text-center py-8">
+                <div className="text-muted-foreground">Loading quiz history...</div>
+              </div>
+            ) : quizHistory.length === 0 ? (
+              <div className="text-center py-8">
+                <History className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                <div className="text-muted-foreground">No quiz history found</div>
+                <p className="text-sm text-muted-foreground mt-2">Take a quiz to see your results here</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {quizHistory.map((quiz) => {
+                  const percentage = Math.round((quiz.score / quiz.quiz.totalQuestions) * 100)
+                  const getScoreColor = () => {
+                    if (percentage >= 80) return "text-green-600"
+                    if (percentage >= 60) return "text-yellow-600"
+                    return "text-red-600"
+                  }
+
+                  return (
+                    <Card
+                      key={quiz.id}
+                      className="cursor-pointer transition-colors hover:bg-muted/50"
+                      onClick={() => viewHistoricalQuiz(quiz)}
+                    >
+                      <CardContent className="pt-6">
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-3">
+                              <Trophy className="h-5 w-5 text-muted-foreground" />
+                              <h3 className="font-semibold">{quiz.quiz.title}</h3>
+                              <Badge variant={percentage >= 80 ? "default" : percentage >= 60 ? "secondary" : "destructive"}>
+                                {quiz.score}/{quiz.quiz.totalQuestions}
+                              </Badge>
+                            </div>
+                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                              <div className="flex items-center gap-1">
+                                <Calendar className="h-4 w-4" />
+                                {new Date(quiz.completedAt).toLocaleDateString()}
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Clock className="h-4 w-4" />
+                                {new Date(quiz.completedAt).toLocaleTimeString()}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className={`text-2xl font-bold ${getScoreColor()}`}>
+                              {percentage}%
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              {quiz.quiz.totalQuestions} questions
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
+              </div>
+            )}
+
+            {error && (
+              <Alert className="mt-4" variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    )
   }
 
   // Topic Selection Screen
@@ -161,13 +410,21 @@ export function AptitudeQuiz() {
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Trophy className="h-5 w-5" />
-              Aptitude Quiz
-            </CardTitle>
-            <CardDescription>
-              Choose a topic and test your aptitude skills with multiple-choice questions
-            </CardDescription>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <Trophy className="h-5 w-5" />
+                  Aptitude Quiz
+                </CardTitle>
+                <CardDescription>
+                  Choose a topic and test your aptitude skills with multiple-choice questions
+                </CardDescription>
+              </div>
+              <Button onClick={toggleHistory} variant="outline">
+                <History className="h-4 w-4 mr-2" />
+                Quiz History
+              </Button>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
