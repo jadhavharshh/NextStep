@@ -11,8 +11,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
 
 interface FilterProps {
   onBranchChange: (branch: string | null) => void
@@ -60,174 +58,118 @@ export function CollegeFilters({
   const hasActiveFilters = selectedBranch || selectedDegreeType || selectedCollegeType
 
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <IconFilter className="h-5 w-5" />
-            Filters
-          </CardTitle>
-          {hasActiveFilters && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={clearAllFilters}
-              className="h-8 px-2 text-xs"
-            >
-              <IconX className="h-3 w-3 mr-1" />
-              Clear All
-            </Button>
-          )}
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <IconFilter className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm font-medium text-muted-foreground">Filter colleges</span>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-medium">College Type</label>
-            {selectedCollegeType && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onCollegeTypeChange(null)}
-                className="h-6 px-2 text-xs"
-              >
-                <IconX className="h-3 w-3" />
-              </Button>
-            )}
-          </div>
-          <Select
-            value={selectedCollegeType || undefined}
-            onValueChange={(value) => onCollegeTypeChange(value)}
+        {hasActiveFilters && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={clearAllFilters}
+            className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
           >
-            <SelectTrigger>
-              <SelectValue placeholder="Select college type" />
-            </SelectTrigger>
-            <SelectContent>
-              {collegeTypes.map((type) => (
-                <SelectItem key={type} value={type}>
-                  {type}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+            <IconX className="h-3 w-3 mr-1" />
+            Clear all
+          </Button>
+        )}
+      </div>
 
-        <Separator />
+      <div className="flex flex-wrap items-center gap-3">
+        <Select
+          value={selectedCollegeType || undefined}
+          onValueChange={(value) => onCollegeTypeChange(value)}
+        >
+          <SelectTrigger className="w-40 h-9">
+            <SelectValue placeholder="College type" />
+          </SelectTrigger>
+          <SelectContent>
+            {collegeTypes.map((type) => (
+              <SelectItem key={type} value={type}>
+                {type}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-medium">Degree Type</label>
-            {selectedDegreeType && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onDegreeTypeChange(null)}
-                className="h-6 px-2 text-xs"
-              >
-                <IconX className="h-3 w-3" />
-              </Button>
-            )}
-          </div>
-          <Select
-            value={selectedDegreeType || undefined}
-            onValueChange={(value) => onDegreeTypeChange(value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select degree type" />
-            </SelectTrigger>
-            <SelectContent>
-              {degreeTypes.map((degree) => (
-                <SelectItem key={degree} value={degree}>
-                  {degree}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <Select
+          value={selectedDegreeType || undefined}
+          onValueChange={(value) => onDegreeTypeChange(value)}
+        >
+          <SelectTrigger className="w-36 h-9">
+            <SelectValue placeholder="Degree type" />
+          </SelectTrigger>
+          <SelectContent>
+            {degreeTypes.map((degree) => (
+              <SelectItem key={degree} value={degree}>
+                {degree}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
-        <Separator />
-
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-medium">Branch/Stream</label>
-            {selectedBranch && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onBranchChange(null)}
-                className="h-6 px-2 text-xs"
-              >
-                <IconX className="h-3 w-3" />
-              </Button>
-            )}
-          </div>
-          <Select
-            value={selectedBranch || undefined}
-            onValueChange={(value) => onBranchChange(value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select branch" />
-            </SelectTrigger>
-            <SelectContent>
-              {branches.map((branch) => (
-                <SelectItem key={branch} value={branch}>
-                  {branch}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <Select
+          value={selectedBranch || undefined}
+          onValueChange={(value) => onBranchChange(value)}
+        >
+          <SelectTrigger className="w-60 h-9">
+            <SelectValue placeholder="Branch/Stream" />
+          </SelectTrigger>
+          <SelectContent>
+            {branches.map((branch) => (
+              <SelectItem key={branch} value={branch}>
+                {branch}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
         {hasActiveFilters && (
-          <>
-            <Separator />
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Active Filters</label>
-              <div className="flex flex-wrap gap-2">
-                {selectedCollegeType && (
-                  <Badge variant="secondary" className="flex items-center gap-1">
-                    {selectedCollegeType}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-auto p-0 hover:bg-transparent"
-                      onClick={() => onCollegeTypeChange(null)}
-                    >
-                      <IconX className="h-3 w-3" />
-                    </Button>
-                  </Badge>
-                )}
-                {selectedDegreeType && (
-                  <Badge variant="secondary" className="flex items-center gap-1">
-                    {selectedDegreeType}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-auto p-0 hover:bg-transparent"
-                      onClick={() => onDegreeTypeChange(null)}
-                    >
-                      <IconX className="h-3 w-3" />
-                    </Button>
-                  </Badge>
-                )}
-                {selectedBranch && (
-                  <Badge variant="secondary" className="flex items-center gap-1">
-                    {selectedBranch.length > 20 ? `${selectedBranch.substring(0, 20)}...` : selectedBranch}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-auto p-0 hover:bg-transparent"
-                      onClick={() => onBranchChange(null)}
-                    >
-                      <IconX className="h-3 w-3" />
-                    </Button>
-                  </Badge>
-                )}
-              </div>
-            </div>
-          </>
+          <div className="flex items-center gap-2 ml-2">
+            {selectedCollegeType && (
+              <Badge variant="secondary" className="flex items-center gap-1 h-7">
+                {selectedCollegeType}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-auto p-0 hover:bg-transparent"
+                  onClick={() => onCollegeTypeChange(null)}
+                >
+                  <IconX className="h-3 w-3" />
+                </Button>
+              </Badge>
+            )}
+            {selectedDegreeType && (
+              <Badge variant="secondary" className="flex items-center gap-1 h-7">
+                {selectedDegreeType}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-auto p-0 hover:bg-transparent"
+                  onClick={() => onDegreeTypeChange(null)}
+                >
+                  <IconX className="h-3 w-3" />
+                </Button>
+              </Badge>
+            )}
+            {selectedBranch && (
+              <Badge variant="secondary" className="flex items-center gap-1 h-7">
+                {selectedBranch.length > 25 ? `${selectedBranch.substring(0, 25)}...` : selectedBranch}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-auto p-0 hover:bg-transparent"
+                  onClick={() => onBranchChange(null)}
+                >
+                  <IconX className="h-3 w-3" />
+                </Button>
+              </Badge>
+            )}
+          </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

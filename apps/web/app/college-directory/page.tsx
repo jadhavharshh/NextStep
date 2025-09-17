@@ -46,29 +46,23 @@ export default function CollegeDirectoryPage() {
                 />
               </div>
 
-              <div className="px-4 lg:px-6">
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                  <div className="lg:col-span-1">
-                    <CollegeFilters
-                      onBranchChange={setSelectedBranch}
-                      onDegreeTypeChange={setSelectedDegreeType}
-                      onCollegeTypeChange={setSelectedCollegeType}
-                      selectedBranch={selectedBranch}
-                      selectedDegreeType={selectedDegreeType}
-                      selectedCollegeType={selectedCollegeType}
-                    />
-                  </div>
+              <div className="px-4 lg:px-6 space-y-6">
+                <CollegeFilters
+                  onBranchChange={setSelectedBranch}
+                  onDegreeTypeChange={setSelectedDegreeType}
+                  onCollegeTypeChange={setSelectedCollegeType}
+                  selectedBranch={selectedBranch}
+                  selectedDegreeType={selectedDegreeType}
+                  selectedCollegeType={selectedCollegeType}
+                />
 
-                  <div className="lg:col-span-3">
-                    <CollegeDirectoryTable
-                      colleges={collegesData}
-                      selectedLocation={selectedLocation}
-                      selectedBranch={selectedBranch}
-                      selectedDegreeType={selectedDegreeType}
-                      selectedCollegeType={selectedCollegeType}
-                    />
-                  </div>
-                </div>
+                <CollegeDirectoryTable
+                  colleges={collegesData as any}
+                  selectedLocation={selectedLocation}
+                  selectedBranch={selectedBranch}
+                  selectedDegreeType={selectedDegreeType}
+                  selectedCollegeType={selectedCollegeType}
+                />
               </div>
             </div>
           </div>
