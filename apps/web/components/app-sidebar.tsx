@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useSession } from "@/lib/auth-client"
 import {
   IconCamera,
   IconChartBar,
@@ -167,6 +168,14 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data: session } = useSession();
+
+  const userData = {
+    name: session?.user?.name || "User",
+    email: session?.user?.email || "user@example.com",
+    avatar: session?.user?.image || "/avatars/shadcn.jpg",
+  };
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -190,7 +199,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={userData} />
       </SidebarFooter>
     </Sidebar>
   )
