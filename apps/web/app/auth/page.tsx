@@ -1,351 +1,267 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Separator } from "@/components/ui/separator"
-import { signIn, signUp } from "@/lib/auth-client"
-import { toast } from "sonner"
-import { Eye, EyeOff, Mail, Lock, User, Github } from "lucide-react"
+import Link from 'next/link';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Sparkles } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { signIn, signUp } from '@/lib/auth-client';
+import { toast } from 'sonner';
 
 const signInSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-})
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+});
 
-const signUpSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-})
+const signUpSchema = z
+  .object({
+    name: z.string().min(2, 'Name must be at least 2 characters'),
+    email: z.string().email('Please enter a valid email address'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  });
 
-type SignInForm = z.infer<typeof signInSchema>
-type SignUpForm = z.infer<typeof signUpSchema>
+type SignInForm = z.infer<typeof signInSchema>;
+type SignUpForm = z.infer<typeof signUpSchema>;
 
 export default function AuthPage() {
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const signInForm = useForm<SignInForm>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
-  })
+  });
 
   const signUpForm = useForm<SignUpForm>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
-  })
+  });
 
   const onSignIn = async (data: SignInForm) => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const result = await signIn.email({
         email: data.email,
         password: data.password,
-      })
+      });
 
       if (result.error) {
-        toast.error(result.error.message || "Failed to sign in")
+        toast.error(result.error.message || 'Failed to sign in');
       } else {
-        toast.success("Welcome back!")
-        router.push("/dashboard")
+        toast.success('Welcome back!');
+        router.push('/dashboard');
       }
     } catch {
-      toast.error("An unexpected error occurred")
+      toast.error('An unexpected error occurred');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const onSignUp = async (data: SignUpForm) => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const result = await signUp.email({
         email: data.email,
         password: data.password,
         name: data.name,
-      })
+      });
 
       if (result.error) {
-        toast.error(result.error.message || "Failed to create account")
+        toast.error(result.error.message || 'Failed to create account');
       } else {
-        toast.success("Account created successfully!")
-        router.push("/dashboard")
+        toast.success('Account created successfully!');
+        router.push('/dashboard');
       }
     } catch {
-      toast.error("An unexpected error occurred")
+      toast.error('An unexpected error occurred');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/20 p-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-            NextStep
-          </h1>
-          <p className="text-muted-foreground mt-2">Welcome to your journey</p>
+    <div className="grid min-h-svh lg:grid-cols-2">
+      <div className="flex flex-col gap-4 p-6 md:p-10">
+        <div className="flex justify-center gap-2 md:justify-start">
+          <Link href="/" className="flex items-center gap-2 font-medium">
+            <div className="bg-gradient-to-r from-purple-500 to-blue-500 text-white flex size-8 items-center justify-center rounded-lg">
+              <Sparkles className="size-5" />
+            </div>
+            <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              NextStep
+            </span>
+          </Link>
         </div>
-
-        <Card className="border-2">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl text-center">Get Started</CardTitle>
-            <CardDescription className="text-center">
-              Sign in to your account or create a new one
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+        <div className="flex flex-1 items-center justify-center">
+          <div className="w-full max-w-xs">
             <Tabs defaultValue="signin" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="signin">Sign In</TabsTrigger>
                 <TabsTrigger value="signup">Sign Up</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="signin" className="space-y-4 mt-6">
-                <Form {...signInForm}>
-                  <form onSubmit={signInForm.handleSubmit(onSignIn)} className="space-y-4">
-                    <FormField
-                      control={signInForm.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground size-4" />
-                              <Input
-                                placeholder="Enter your email"
-                                className="pl-10"
-                                {...field}
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+              <TabsContent value="signin" className="space-y-6 mt-8">
+                <div className="flex flex-col items-center gap-2 text-center">
+                  <h1 className="text-2xl font-bold">Welcome back</h1>
+                  <p className="text-muted-foreground text-sm text-balance">
+                    Enter your credentials to access your account
+                  </p>
+                </div>
+                <form
+                  onSubmit={signInForm.handleSubmit(onSignIn)}
+                  className="space-y-6"
+                >
+                  <div className="grid gap-3">
+                    <Label htmlFor="signin-email">Email</Label>
+                    <Input
+                      id="signin-email"
+                      type="email"
+                      placeholder="m@example.com"
+                      {...signInForm.register('email')}
                     />
-
-                    <FormField
-                      control={signInForm.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Password</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground size-4" />
-                              <Input
-                                type={showPassword ? "text" : "password"}
-                                placeholder="Enter your password"
-                                className="pl-10 pr-10"
-                                {...field}
-                              />
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="icon"
-                                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                                onClick={() => setShowPassword(!showPassword)}
-                              >
-                                {showPassword ? (
-                                  <EyeOff className="size-4 text-muted-foreground" />
-                                ) : (
-                                  <Eye className="size-4 text-muted-foreground" />
-                                )}
-                              </Button>
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+                    {signInForm.formState.errors.email && (
+                      <p className="text-sm text-red-500">
+                        {signInForm.formState.errors.email.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="grid gap-3">
+                    <div className="flex items-center">
+                      <Label htmlFor="signin-password">Password</Label>
+                      <a
+                        href="#"
+                        className="ml-auto text-sm underline-offset-4 hover:underline"
+                      >
+                        Forgot your password?
+                      </a>
+                    </div>
+                    <Input
+                      id="signin-password"
+                      type="password"
+                      {...signInForm.register('password')}
                     />
-
-                    <Button type="submit" className="w-full" disabled={isLoading}>
-                      {isLoading ? "Signing In..." : "Sign In"}
-                    </Button>
-                  </form>
-                </Form>
+                    {signInForm.formState.errors.password && (
+                      <p className="text-sm text-red-500">
+                        {signInForm.formState.errors.password.message}
+                      </p>
+                    )}
+                  </div>
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? 'Signing in...' : 'Sign In'}
+                  </Button>
+                </form>
               </TabsContent>
 
-              <TabsContent value="signup" className="space-y-4 mt-6">
-                <Form {...signUpForm}>
-                  <form onSubmit={signUpForm.handleSubmit(onSignUp)} className="space-y-4">
-                    <FormField
-                      control={signUpForm.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Full Name</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground size-4" />
-                              <Input
-                                placeholder="Enter your full name"
-                                className="pl-10"
-                                {...field}
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+              <TabsContent value="signup" className="space-y-6 mt-8">
+                <div className="flex flex-col items-center gap-2 text-center">
+                  <h1 className="text-2xl font-bold">Create an account</h1>
+                  <p className="text-muted-foreground text-sm text-balance">
+                    Enter your information to create your account
+                  </p>
+                </div>
+                <form
+                  onSubmit={signUpForm.handleSubmit(onSignUp)}
+                  className="space-y-6"
+                >
+                  <div className="grid gap-3">
+                    <Label htmlFor="signup-name">Full Name</Label>
+                    <Input
+                      id="signup-name"
+                      type="text"
+                      placeholder="John Doe"
+                      {...signUpForm.register('name')}
                     />
-
-                    <FormField
-                      control={signUpForm.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground size-4" />
-                              <Input
-                                placeholder="Enter your email"
-                                className="pl-10"
-                                {...field}
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+                    {signUpForm.formState.errors.name && (
+                      <p className="text-sm text-red-500">
+                        {signUpForm.formState.errors.name.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="grid gap-3">
+                    <Label htmlFor="signup-email">Email</Label>
+                    <Input
+                      id="signup-email"
+                      type="email"
+                      placeholder="m@example.com"
+                      {...signUpForm.register('email')}
                     />
-
-                    <FormField
-                      control={signUpForm.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Password</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground size-4" />
-                              <Input
-                                type={showPassword ? "text" : "password"}
-                                placeholder="Create a password"
-                                className="pl-10 pr-10"
-                                {...field}
-                              />
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="icon"
-                                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                                onClick={() => setShowPassword(!showPassword)}
-                              >
-                                {showPassword ? (
-                                  <EyeOff className="size-4 text-muted-foreground" />
-                                ) : (
-                                  <Eye className="size-4 text-muted-foreground" />
-                                )}
-                              </Button>
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+                    {signUpForm.formState.errors.email && (
+                      <p className="text-sm text-red-500">
+                        {signUpForm.formState.errors.email.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="grid gap-3">
+                    <Label htmlFor="signup-password">Password</Label>
+                    <Input
+                      id="signup-password"
+                      type="password"
+                      {...signUpForm.register('password')}
                     />
-
-                    <FormField
-                      control={signUpForm.control}
-                      name="confirmPassword"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Confirm Password</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground size-4" />
-                              <Input
-                                type={showConfirmPassword ? "text" : "password"}
-                                placeholder="Confirm your password"
-                                className="pl-10 pr-10"
-                                {...field}
-                              />
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="icon"
-                                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                              >
-                                {showConfirmPassword ? (
-                                  <EyeOff className="size-4 text-muted-foreground" />
-                                ) : (
-                                  <Eye className="size-4 text-muted-foreground" />
-                                )}
-                              </Button>
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+                    {signUpForm.formState.errors.password && (
+                      <p className="text-sm text-red-500">
+                        {signUpForm.formState.errors.password.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="grid gap-3">
+                    <Label htmlFor="signup-confirm">Confirm Password</Label>
+                    <Input
+                      id="signup-confirm"
+                      type="password"
+                      {...signUpForm.register('confirmPassword')}
                     />
-
-                    <Button type="submit" className="w-full" disabled={isLoading}>
-                      {isLoading ? "Creating Account..." : "Create Account"}
-                    </Button>
-                  </form>
-                </Form>
+                    {signUpForm.formState.errors.confirmPassword && (
+                      <p className="text-sm text-red-500">
+                        {signUpForm.formState.errors.confirmPassword.message}
+                      </p>
+                    )}
+                  </div>
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? 'Creating account...' : 'Create Account'}
+                  </Button>
+                </form>
               </TabsContent>
             </Tabs>
-
-            <div className="mt-6">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <Separator className="w-full" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
-                    Or continue with
-                  </span>
-                </div>
-              </div>
-
-              <div className="mt-4 grid grid-cols-1 gap-2">
-                <Button variant="outline" className="w-full" disabled>
-                  <Github className="mr-2 size-4" />
-                  GitHub (Coming Soon)
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <p className="text-center text-sm text-muted-foreground mt-4">
-          By continuing, you agree to our{" "}
-          <a href="#" className="underline underline-offset-4 hover:text-primary">
-            Terms of Service
-          </a>{" "}
-          and{" "}
-          <a href="#" className="underline underline-offset-4 hover:text-primary">
-            Privacy Policy
-          </a>
-        </p>
+          </div>
+        </div>
+      </div>
+      <div className="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative hidden lg:block">
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-10"></div>
+        <div className="absolute top-0 left-0 w-full h-full">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+          <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-blue-500/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+          <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-pink-500/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+        </div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center space-y-4">
+            <h2 className="text-4xl font-bold text-white">
+              Elevate your journey
+            </h2>
+            <p className="text-slate-300 text-lg">to the next level</p>
+          </div>
+        </div>
       </div>
     </div>
-  )
+  );
 }
