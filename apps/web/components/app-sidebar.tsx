@@ -17,6 +17,12 @@ import {
   IconSearch,
   IconSettings,
   IconUsers,
+  IconClipboardCheck,
+  IconMap,
+  IconSchool,
+  IconBookmark,
+  IconCalendar,
+  IconCertificate,
 } from "@tabler/icons-react"
 
 import { NavDocuments } from "@/components/nav-documents"
@@ -46,24 +52,34 @@ const data = {
       icon: IconDashboard,
     },
     {
-      title: "Lifecycle",
+      title: "Assessment",
       url: "#",
-      icon: IconListDetails,
+      icon: IconClipboardCheck,
     },
     {
-      title: "Analytics",
+      title: "Path Mapping",
       url: "#",
-      icon: IconChartBar,
+      icon: IconMap,
     },
     {
-      title: "Projects",
+      title: "College Directory",
       url: "#",
-      icon: IconFolder,
+      icon: IconSchool,
     },
     {
-      title: "Team",
+      title: "Career Guidance",
       url: "#",
-      icon: IconUsers,
+      icon: IconBookmark,
+    },
+    {
+      title: "Schedule",
+      url: "#",
+      icon: IconCalendar,
+    },
+    {
+      title: "Certifications",
+      url: "#",
+      icon: IconCertificate,
     },
   ],
   navClouds: [
