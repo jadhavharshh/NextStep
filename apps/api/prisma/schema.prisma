@@ -1,0 +1,468 @@
+// NextStep Career Platform Database Schema
+// A comprehensive schema for career guidance and education platform
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Management
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String?
+  name      String
+  phone     String?
+  dateOfBirth DateTime?
+  gender    Gender?
+  location  String?
+
+  // Profile completion tracking
+  profileCompleted Boolean @default(false)
+
+  // Academic information
+  currentEducationLevel EducationLevel?
+  currentClass         String?
+  completedClass       String?
+  boardOfEducation     String?
+
+  // User preferences and settings
+  preferredLanguage String @default("en")
+  notificationsEnabled Boolean @default(true)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lastLogin DateTime?
+
+  // Relationships
+  quizResponses     QuizResponse[]
+  savedColleges     SavedCollege[]
+  recommendations   Recommendation[]
+  userTimelineEvents UserTimelineEvent[]
+  userInterests     UserInterest[]
+
+  @@map("users")
+}
+
+// Interest and Aptitude System
+model Interest {
+  id          String @id @default(cuid())
+  name        String @unique
+  description String?
+  category    InterestCategory
+
+  // Relationships
+  userInterests UserInterest[]
+  quizQuestions QuizQuestion[]
+  courses       CourseInterest[]
+
+  @@map("interests")
+}
+
+model UserInterest {
+  id       String @id @default(cuid())
+  userId   String
+  interestId String
+  strength   Int    @default(1) // 1-5 scale
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  interest Interest @relation(fields: [interestId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, interestId])
+  @@map("user_interests")
+}
+
+// Quiz and Assessment System
+model Quiz {
+  id          String @id @default(cuid())
+  title       String
+  description String?
+  category    QuizCategory
+  targetLevel EducationLevel
+  isActive    Boolean @default(true)
+
+  // Quiz configuration
+  timeLimit   Int?    // in minutes
+  totalQuestions Int
+  passingScore   Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  questions QuizQuestion[]
+  responses QuizResponse[]
+
+  @@map("quizzes")
+}
+
+model QuizQuestion {
+  id       String @id @default(cuid())
+  quizId   String
+  question String
+  type     QuestionType
+  options  Json? // For multiple choice questions
+  order    Int
+
+  // Interest mapping
+  interestId String?
+  weightage  Int @default(1)
+
+  quiz     Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  interest Interest? @relation(fields: [interestId], references: [id])
+
+  @@map("quiz_questions")
+}
+
+model QuizResponse {
+  id       String @id @default(cuid())
+  userId   String
+  quizId   String
+  answers  Json
+  score    Float?
+
+  // Results and recommendations
+  suggestedStreams String[]
+  completedAt      DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, quizId])
+  @@map("quiz_responses")
+}
+
+// Course and Stream Management
+model Stream {
+  id          String @id @default(cuid())
+  name        String @unique
+  description String?
+  level       EducationLevel
+
+  // Prerequisites
+  requiredSubjects String[]
+  minPercentage    Float?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  courses Course[]
+
+  @@map("streams")
+}
+
+model Course {
+  id          String @id @default(cuid())
+  name        String
+  code        String? @unique
+  description String?
+  streamId    String
+  duration    Int     // in years
+
+  // Course details
+  eligibility   String[]
+  averageSalary Json?    // salary ranges by experience
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  stream         Stream           @relation(fields: [streamId], references: [id])
+  interests      CourseInterest[]
+  colleges       CollegeCourse[]
+  careerPaths    CareerPath[]
+
+  @@map("courses")
+}
+
+model CourseInterest {
+  id         String @id @default(cuid())
+  courseId   String
+  interestId String
+  relevance  Int    @default(1) // 1-5 scale
+
+  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  interest Interest @relation(fields: [interestId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, interestId])
+  @@map("course_interests")
+}
+
+// Career Pathway System
+model CareerPath {
+  id          String @id @default(cuid())
+  title       String
+  description String?
+  courseId    String
+
+  // Career details
+  averageSalary    Json?    // by experience level
+  growthProspects  String?
+  requiredSkills   String[]
+  jobTitles        String[]
+  industries       String[]
+
+  // Future opportunities
+  higherEducation  String[]
+  certifications   String[]
+  entrepreneurship String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  course Course @relation(fields: [courseId], references: [id])
+
+  @@map("career_paths")
+}
+
+// College and Institution Management
+model College {
+  id        String @id @default(cuid())
+  name      String
+  code      String? @unique
+  type      CollegeType
+
+  // Location details
+  address   String
+  city      String
+  district  String
+  state     String @default("Jammu and Kashmir")
+  pincode   String?
+
+  // Contact information
+  phone     String?
+  email     String?
+  website   String?
+
+  // College details
+  establishment Int?
+  affiliation   String?
+  accreditation String[]
+  facilities    String[]
+
+  // Admission details
+  applicationDeadline DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  courses      CollegeCourse[]
+  savedBy      SavedCollege[]
+  admissions   AdmissionInfo[]
+
+  @@map("colleges")
+}
+
+model CollegeCourse {
+  id         String @id @default(cuid())
+  collegeId  String
+  courseId   String
+
+  // Admission details
+  intake     Int?
+  cutoff     Float?
+  fees       Json?    // fee structure
+  duration   Int?     // if different from course duration
+
+  // Additional details
+  isActive   Boolean @default(true)
+
+  college College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  course  Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([collegeId, courseId])
+  @@map("college_courses")
+}
+
+model SavedCollege {
+  id        String @id @default(cuid())
+  userId    String
+  collegeId String
+  notes     String?
+  savedAt   DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  college College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, collegeId])
+  @@map("saved_colleges")
+}
+
+// Timeline and Events Management
+model TimelineEvent {
+  id          String @id @default(cuid())
+  title       String
+  description String?
+  type        EventType
+
+  // Event timing
+  startDate   DateTime
+  endDate     DateTime?
+  isRecurring Boolean @default(false)
+
+  // Event details
+  eligibility String[]
+  requirements String[]
+  externalUrl  String?
+
+  // Targeting
+  targetLevel EducationLevel?
+  targetStreams String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  admissionInfo AdmissionInfo[]
+  userEvents    UserTimelineEvent[]
+
+  @@map("timeline_events")
+}
+
+model UserTimelineEvent {
+  id      String @id @default(cuid())
+  userId  String
+  eventId String
+
+  // User-specific event details
+  isCompleted Boolean @default(false)
+  notes       String?
+  reminderSet Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  user  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event TimelineEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventId])
+  @@map("user_timeline_events")
+}
+
+// Admission and Scholarship Information
+model AdmissionInfo {
+  id        String @id @default(cuid())
+  collegeId String
+  eventId   String?
+
+  // Admission details
+  process      String?
+  documents    String[]
+  eligibility  String[]
+
+  // Important dates
+  applicationStart DateTime?
+  applicationEnd   DateTime?
+  examDate         DateTime?
+  resultDate       DateTime?
+  counselingDate   DateTime?
+
+  // Fees and scholarships
+  applicationFee Float?
+  scholarships   Json?
+
+  college College        @relation(fields: [collegeId], references: [id])
+  event   TimelineEvent? @relation(fields: [eventId], references: [id])
+
+  @@map("admission_info")
+}
+
+// Recommendation System
+model Recommendation {
+  id     String @id @default(cuid())
+  userId String
+  type   RecommendationType
+
+  // Recommendation content
+  title       String
+  description String?
+  data        Json
+  confidence  Float // 0-1 score
+
+  // Recommendation metadata
+  isViewed   Boolean @default(false)
+  isAccepted Boolean?
+  feedback   String?
+
+  createdAt DateTime @default(now())
+  expiresAt DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("recommendations")
+}
+
+// Enums
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+  PREFER_NOT_TO_SAY
+}
+
+enum EducationLevel {
+  CLASS_10
+  CLASS_11
+  CLASS_12
+  UNDERGRADUATE
+  POSTGRADUATE
+  DOCTORATE
+}
+
+enum InterestCategory {
+  SCIENCE
+  TECHNOLOGY
+  ARTS
+  COMMERCE
+  SOCIAL_SCIENCE
+  SPORTS
+  CREATIVE
+  SERVICE
+}
+
+enum QuizCategory {
+  APTITUDE
+  INTEREST
+  PERSONALITY
+  SKILL_ASSESSMENT
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  TRUE_FALSE
+  RATING_SCALE
+  TEXT_INPUT
+}
+
+enum CollegeType {
+  GOVERNMENT
+  PRIVATE
+  AUTONOMOUS
+  DEEMED
+  CENTRAL_UNIVERSITY
+  STATE_UNIVERSITY
+}
+
+enum EventType {
+  ADMISSION
+  SCHOLARSHIP
+  ENTRANCE_EXAM
+  COUNSELING
+  RESULT_DECLARATION
+  APPLICATION_DEADLINE
+}
+
+enum RecommendationType {
+  COURSE
+  COLLEGE
+  CAREER_PATH
+  SCHOLARSHIP
+  TIMELINE_EVENT
+}
