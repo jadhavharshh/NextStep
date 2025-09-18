@@ -105,11 +105,24 @@ export default function AuthPage() {
 
   const handleOnboardingComplete = async (onboardingData: any) => {
     try {
-      // Here you can save the onboarding data to your database
-      console.log('Onboarding data:', onboardingData);
-      console.log('User email:', newUserEmail);
+      // Save the onboarding data to the database
+      const response = await fetch('/api/user/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Include cookies for Better Auth session
+        body: JSON.stringify(onboardingData),
+      });
 
-      // For now, just show success message and redirect
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to save profile data');
+      }
+
+      const result = await response.json();
+      console.log('Profile saved successfully:', result);
+
       toast.success('Welcome to NextStep! Your profile has been set up.');
       router.push('/dashboard');
     } catch (error) {

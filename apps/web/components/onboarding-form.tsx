@@ -123,6 +123,7 @@ const ENTRANCE_EXAMS = [
 
 export function OnboardingForm({ open, onOpenChange, onComplete }: OnboardingFormProps) {
   const [currentStep, setCurrentStep] = React.useState(1)
+  const [isLoading, setIsLoading] = React.useState(false)
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -151,9 +152,39 @@ export function OnboardingForm({ open, onOpenChange, onComplete }: OnboardingFor
 
   const progress = (currentStep / STEPS.length) * 100
 
-  const nextStep = () => {
-    if (currentStep < STEPS.length) {
-      setCurrentStep(currentStep + 1)
+  const nextStep = async () => {
+    console.log('Next button clicked, current step:', currentStep)
+    try {
+      setIsLoading(true)
+      // Validate current step fields before proceeding
+      let fieldsToValidate: (keyof FormData)[] = []
+
+      switch (currentStep) {
+        case 1:
+          fieldsToValidate = ['fullName', 'dateOfBirth', 'gender', 'phoneNumber', 'district', 'tehsil']
+          break
+        case 2:
+          fieldsToValidate = ['currentClass', 'currentSchoolCollege', 'board', 'previousMarks']
+          break
+        case 3:
+          fieldsToValidate = ['careerInterests', 'preferredFieldOfStudy', 'studyPreference', 'locationPreference', 'budgetRange']
+          break
+      }
+
+      const isValid = await form.trigger(fieldsToValidate)
+      console.log(`Step ${currentStep} validation result:`, isValid)
+      console.log('Form errors:', form.formState.errors)
+
+      if (isValid && currentStep < STEPS.length) {
+        setCurrentStep(currentStep + 1)
+        console.log('Moving to step:', currentStep + 1)
+      } else if (!isValid) {
+        console.log('Validation failed for fields:', fieldsToValidate)
+      }
+    } catch (error) {
+      console.error('Error in nextStep:', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -163,9 +194,16 @@ export function OnboardingForm({ open, onOpenChange, onComplete }: OnboardingFor
     }
   }
 
-  const onSubmit = (data: FormData) => {
-    onComplete(data)
-    onOpenChange(false)
+  const onSubmit = async (data: FormData) => {
+    try {
+      setIsLoading(true)
+      await onComplete(data)
+      onOpenChange(false)
+    } catch (error) {
+      console.error('Error submitting form:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const renderStep = () => {
@@ -666,11 +704,13 @@ export function OnboardingForm({ open, onOpenChange, onComplete }: OnboardingFor
                     </Button>
 
                     {currentStep < STEPS.length ? (
-                      <Button type="button" onClick={nextStep}>
-                        Next
+                      <Button type="button" onClick={nextStep} disabled={isLoading}>
+                        {isLoading ? 'Validating...' : 'Next'}
                       </Button>
                     ) : (
-                      <Button type="submit">Complete</Button>
+                      <Button type="submit" disabled={isLoading}>
+                        {isLoading ? 'Completing...' : 'Complete'}
+                      </Button>
                     )}
                   </div>
                 </form>
