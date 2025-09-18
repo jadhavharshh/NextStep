@@ -1,5 +1,6 @@
 "use client"
 
+import * as React from "react"
 import {
   IconCreditCard,
   IconDotsVertical,
@@ -28,6 +29,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { UserProfileDialog } from "@/components/user-profile-dialog"
 
 export function NavUser({
   user,
@@ -39,6 +41,7 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+  const [showProfile, setShowProfile] = React.useState(false)
 
   return (
     <SidebarMenu>
@@ -84,9 +87,9 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setShowProfile(true)}>
                 <IconUserCircle />
-                Account
+                View Profile
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <IconCreditCard />
@@ -105,6 +108,12 @@ export function NavUser({
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
+
+      <UserProfileDialog
+        open={showProfile}
+        onOpenChange={setShowProfile}
+        user={user}
+      />
     </SidebarMenu>
   )
 }
