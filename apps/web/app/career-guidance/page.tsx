@@ -183,7 +183,9 @@ export default function CareerGuidancePage() {
     if (messages.length === 0) {
       const welcomeMessage: ChatMessage = {
         id: 'welcome',
-        text: "Hello! I'm your career guidance assistant. How can I help you today?",
+        text: userProfile?.name
+          ? `Hi ${userProfile.name.split(' ')[0]}! I am so glad you are here. I have been helping students like you navigate their career journeys for years, and I am excited to work with you. What is on your mind about your future? Any specific concerns or dreams you would like to explore?`
+          : "Hi there! I am so glad you are here. I have been helping students navigate their career journeys for years, and I am excited to work with you. What is on your mind about your future? Any specific concerns or dreams you would like to explore?",
         isUser: false,
         timestamp: new Date(),
       };

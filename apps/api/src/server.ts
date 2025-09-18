@@ -144,7 +144,7 @@ Remember: This student trusts you with their future. Be the mentor they need - s
     res.status(500).json({
       error: 'Failed to generate response. Please try again later.',
       details:
-        process.env.NODE_ENV === 'development' ? error.message : undefined,
+        process.env.NODE_ENV === 'development' ? (error as Error).message : undefined,
     });
   }
 });
