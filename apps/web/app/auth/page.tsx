@@ -13,6 +13,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { signIn, signUp } from '@/lib/auth-client';
 import { toast } from 'sonner';
+import { OnboardingForm } from '@/components/onboarding-form';
 
 const signInSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -36,6 +37,8 @@ type SignUpForm = z.infer<typeof signUpSchema>;
 
 export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [newUserEmail, setNewUserEmail] = useState('');
   const router = useRouter();
 
   const signInForm = useForm<SignInForm>({
@@ -90,12 +93,28 @@ export default function AuthPage() {
         toast.error(result.error.message || 'Failed to create account');
       } else {
         toast.success('Account created successfully!');
-        router.push('/dashboard');
+        setNewUserEmail(data.email);
+        setShowOnboarding(true);
       }
     } catch {
       toast.error('An unexpected error occurred');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleOnboardingComplete = async (onboardingData: any) => {
+    try {
+      // Here you can save the onboarding data to your database
+      console.log('Onboarding data:', onboardingData);
+      console.log('User email:', newUserEmail);
+
+      // For now, just show success message and redirect
+      toast.success('Welcome to NextStep! Your profile has been set up.');
+      router.push('/dashboard');
+    } catch (error) {
+      toast.error('Failed to save your information. Please try again.');
+      console.error('Error saving onboarding data:', error);
     }
   };
 
@@ -262,6 +281,12 @@ export default function AuthPage() {
           </div>
         </div>
       </div>
+
+      <OnboardingForm
+        open={showOnboarding}
+        onOpenChange={setShowOnboarding}
+        onComplete={handleOnboardingComplete}
+      />
     </div>
   );
 }
