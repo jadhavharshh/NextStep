@@ -7,7 +7,7 @@ export const auth = betterAuth({
     connectionString: process.env.DATABASE_URL || "postgresql://postgres:password@localhost:5432/nextstep"
   }),
   secret: process.env.BETTER_AUTH_SECRET || "your-super-secret-key-for-development-only-change-in-production",
-  baseURL: process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+  baseURL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
   emailAndPassword: {
     enabled: true
   },
