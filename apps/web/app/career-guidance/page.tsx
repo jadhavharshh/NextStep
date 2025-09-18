@@ -29,6 +29,29 @@ interface ChatMessage {
   timestamp: Date;
 }
 
+interface UserProfileData {
+  id: string;
+  email: string;
+  name: string;
+  phone?: string;
+  dateOfBirth?: string;
+  gender?: string;
+  location?: string;
+  profileCompleted: boolean;
+  currentEducationLevel?: string;
+  currentClass?: string;
+  boardOfEducation?: string;
+  userInterests?: Array<{
+    interest: {
+      id: string;
+      name: string;
+      category: string;
+      description?: string;
+    };
+    strength: number;
+  }>;
+}
+
 export default function CareerGuidancePage() {
   const [status, setStatus] = useState<AssessmentStatus>({
     hasCompletedAssessment: false,
@@ -40,10 +63,33 @@ export default function CareerGuidancePage() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
+  const [userProfile, setUserProfile] = useState<UserProfileData | null>(null);
+  const [profileLoading, setProfileLoading] = useState(false);
 
   useEffect(() => {
     checkAssessmentStatus();
+    fetchUserProfile();
   }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      setProfileLoading(true);
+      const response = await fetch('/api/user/profile', {
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setUserProfile(result.data);
+      } else {
+        console.error('Failed to fetch user profile');
+      }
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    } finally {
+      setProfileLoading(false);
+    }
+  };
 
   const checkAssessmentStatus = async () => {
     try {
@@ -82,12 +128,30 @@ export default function CareerGuidancePage() {
     setChatLoading(true);
 
     try {
+      // Prepare user context for the AI
+      const userContext = userProfile ? {
+        name: userProfile.name,
+        age: userProfile.dateOfBirth ? Math.floor((new Date().getTime() - new Date(userProfile.dateOfBirth).getTime()) / (365.25 * 24 * 60 * 60 * 1000)) : null,
+        location: userProfile.location,
+        educationLevel: userProfile.currentEducationLevel,
+        currentClass: userProfile.currentClass,
+        board: userProfile.boardOfEducation,
+        interests: userProfile.userInterests?.map(ui => ({
+          name: ui.interest.name,
+          category: ui.interest.category,
+          strength: ui.strength
+        })) || []
+      } : null;
+
       const response = await fetch('http://localhost:7001/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({
+          message,
+          userContext
+        }),
       });
 
       const data = await response.json();
