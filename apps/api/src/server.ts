@@ -99,7 +99,7 @@ IMPORTANT: Never list out their personal information back to them. Use it intern
 
       if (userContext.interests && userContext.interests.length > 0) {
         systemPrompt += `\n- Career Interests:`;
-        userContext.interests.forEach(interest => {
+        userContext.interests.forEach((interest: { name: string; category: string; strength: number }) => {
           systemPrompt += `\n  • ${interest.name} (${interest.category}, Strength: ${interest.strength}/5)`;
         });
       }
