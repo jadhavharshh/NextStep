@@ -238,7 +238,7 @@ export function CollegeDirectoryTable({
           <div className="space-y-1">
             {Object.entries(relevantFees)
               .filter(([, fee]) => fee !== undefined)
-              .map(([degree, fee]) => (
+              .map(([degree, fee]: any) => (
                 <div key={degree} className="flex items-center gap-1 text-sm">
                   <IconCurrencyRupee className="h-3 w-3" />
                   <span className="font-medium">

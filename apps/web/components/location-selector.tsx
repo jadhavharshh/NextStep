@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { IconMapPin, IconLoader, IconChevronDown } from "@tabler/icons-react"
+import { useState } from "react"
+import { IconMapPin, IconLoader } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
 import {
   Select,

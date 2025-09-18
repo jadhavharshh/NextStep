@@ -51,13 +51,13 @@ export async function POST(request: NextRequest) {
 
       // Create quiz questions
       for (let i = 0; i < data.questions.length; i++) {
-        const question = data.questions[i]
+        const question: any = data.questions[i]
         await prisma.quizQuestion.create({
           data: {
             quizId: quiz.id,
-            question: question.question,
+            question: question?.question || '',
             type: 'MULTIPLE_CHOICE',
-            options: question.options,
+            options: question?.options || [],
             order: i + 1
           }
         })

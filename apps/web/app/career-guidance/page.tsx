@@ -310,7 +310,7 @@ export default function CareerGuidancePage() {
                           Ready for Career Guidance
                         </CardTitle>
                         <CardDescription>
-                          Great! You've completed all prerequisites. You can now
+                          Great! You&apos;ve completed all prerequisites. You can now
                           access personalized career guidance.
                         </CardDescription>
                       </CardHeader>

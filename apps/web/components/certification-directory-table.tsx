@@ -115,15 +115,13 @@ export function CertificationDirectoryTable({
 
       // Price range filter
       if (selectedPriceRange) {
-        const [min, max] = selectedPriceRange.split('-').map(val => {
-          if (val === '300+') return [300, Infinity]
-          return parseInt(val)
-        })
-        const cost = certification.cost
+        const cost: any = certification.cost
         if (selectedPriceRange === '300+') {
           if (cost <= 300) return false
         } else {
-          const [minPrice, maxPrice] = [min, max]
+          const [min, max] = selectedPriceRange.split('-').map((val: any) => parseInt(val))
+          const minPrice: any = min
+          const maxPrice: any = max
           if (cost < minPrice || cost > maxPrice) return false
         }
       }

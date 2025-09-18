@@ -654,7 +654,7 @@ export function OnboardingForm({ open, onOpenChange, onComplete }: OnboardingFor
         <DialogHeader>
           <DialogTitle>Welcome to NextStep!</DialogTitle>
           <DialogDescription>
-            Let's get to know you better to provide personalized career guidance.
+            Let&apos;s get to know you better to provide personalized career guidance.
           </DialogDescription>
         </DialogHeader>
 

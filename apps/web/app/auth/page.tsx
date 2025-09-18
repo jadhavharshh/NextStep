@@ -38,7 +38,6 @@ type SignUpForm = z.infer<typeof signUpSchema>;
 export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const [newUserEmail, setNewUserEmail] = useState('');
   const router = useRouter();
 
   const signInForm = useForm<SignInForm>({
@@ -93,7 +92,6 @@ export default function AuthPage() {
         toast.error(result.error.message || 'Failed to create account');
       } else {
         toast.success('Account created successfully!');
-        setNewUserEmail(data.email);
         setShowOnboarding(true);
       }
     } catch {
