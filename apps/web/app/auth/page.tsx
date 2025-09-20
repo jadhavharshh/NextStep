@@ -67,13 +67,16 @@ export default function AuthPage() {
       });
 
       if (result.error) {
+        console.error('Sign-in error:', result.error);
         toast.error(result.error.message || 'Failed to sign in');
       } else {
+        console.log('Sign-in successful:', result);
         toast.success('Welcome back!');
         router.push('/dashboard');
       }
-    } catch {
-      toast.error('An unexpected error occurred');
+    } catch (error) {
+      console.error('Sign-in unexpected error:', error);
+      toast.error('An unexpected error occurred. Please check the console for details.');
     } finally {
       setIsLoading(false);
     }
@@ -89,13 +92,16 @@ export default function AuthPage() {
       });
 
       if (result.error) {
+        console.error('Sign-up error:', result.error);
         toast.error(result.error.message || 'Failed to create account');
       } else {
+        console.log('Sign-up successful:', result);
         toast.success('Account created successfully!');
         setShowOnboarding(true);
       }
-    } catch {
-      toast.error('An unexpected error occurred');
+    } catch (error) {
+      console.error('Sign-up unexpected error:', error);
+      toast.error('An unexpected error occurred. Please check the console for details.');
     } finally {
       setIsLoading(false);
     }
